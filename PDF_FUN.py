@@ -61,8 +61,8 @@ def Vedomosti(file, parsed, directory1):
     fileReader = PyPDF2.PdfFileReader(directory1 + file)
     num_pages = fileReader.getNumPages()
     # print(Num_int)
-    Predmet = parsed['content'].find("семестр")
-    Correct_Semestr = parsed['content'][Predmet + 2:Predmet +30]
+    Predmet = parsed['content'].find("семестр\n") + 9
+    Correct_Semestr = parsed['content'][Predmet:Predmet +30]
     print(Correct_Semestr)
     Correct_Name = parsed["content"][Num_int + 2:Num_int + 11]
     Correct_Name.replace(" ", "")
@@ -83,9 +83,9 @@ def SearchGroup(inputPDF):
           return group.group()
 
 def SearchPredmet(inputPDF):
-    data = input inputPDF['content']
+    data = inputPDF['content']
 
-    predmet =
+    predmet = 'lol'
 
 def Name(Name):
     return os.rename(path, f'{direc}Ведомость_{Name}.pdf')

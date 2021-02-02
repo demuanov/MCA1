@@ -1,11 +1,21 @@
 from __future__ import print_function
-import io
+import os
 import re
+import pandas as pd
 
-input = 'C:\\1\\2\\Ведомость_000051626.txt'
+#input = 'C:\\1\\2\\Ведомость_000051626.txt'
 
-# input = 'C:\\1\\2\\1.txt'
-Substring = r'\b\d{5}\b'
+input = 'D://drop//Dropbox//20-21//Аккредитация//Scan//Новая папка//Список.xls'
+
+x1 = pd.ExcelFile(input)
+
+print(x1.sheet_names)
+
+df1 = x1.parse('TDSheet')
+df1_Vedomosti =  df1['Номер']
+
+print(df1)
+print(df1_Vedomosti[0])
 
 with open(input) as o:
     data = o.readlines()

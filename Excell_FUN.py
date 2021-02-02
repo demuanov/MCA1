@@ -26,8 +26,6 @@ df1 = xl.parse(list_name)
 names_from_excell = df1['ФИО'].tolist()
 files = sorted([path for path in os.listdir(directory) if os.path.isfile(directory+path)])
 
-
-
 i=0
 files1 = []
 for i in files:
