@@ -12,10 +12,21 @@ x1 = pd.ExcelFile(input)
 print(x1.sheet_names)
 
 df1 = x1.parse('TDSheet')
-df1_Vedomosti =  df1['Номер']
+df1_Vedomosti_Number = df1['Номер']
 
-print(df1)
-print(df1_Vedomosti[0])
+Input_Vedomosti = '00000059453'
+
+Input_Vedomosti = Input_Vedomosti.lstrip("0")
+
+for i in range(df1_Vedomosti_Number.size):
+    if Input_Vedomosti == df1_Vedomosti_Number[i]:
+        print(df1_Vedomosti_Number[i])
+        Discipline = df1['Дисциплина'][i]
+        Semestr = df1['Период контроля'][i]
+    i += 1
+
+
+print(df1_Vedomosti_Number[0])
 
 with open(input) as o:
     data = o.readlines()

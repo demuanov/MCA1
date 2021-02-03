@@ -1,22 +1,21 @@
 # import re module
 import re
+import pandas as pd
+input = 'D://drop//Dropbox//20-21//Аккредитация//Scan//Новая папка//Список.xls'
 
-Substring ='string'
+x1 = pd.ExcelFile(input)
+df1 = x1.parse('TDSheet')
+df2 = x1.parse('Napr')
 
 
-String1 ='''We are learning regex with geeksforgeeks 
-		regex is very useful for string matching.
-		It is fast too.'''
-String2 ='''string We are learning regex with geeksforgeeks 
-		regex is very useful for string matching.
-		It is fast too.'''
+GroupNumber = 19112
 
-# Use of re.search() Method
-print(re.search(Substring, String1, re.IGNORECASE)[0])
-# Use of re.match() Method
-print(re.match(Substring, String1, re.IGNORECASE))
+for i in range(df2['Направление'].size-1):
+    if GroupNumber == df2['Группа'][i]:
+        Napravlenie = df2['Направление'][i]
+    i += 1
 
-# Use of re.search() Method
-print(re.search(Substring, String2, re.IGNORECASE))
-# Use of re.match() Method
-print(re.match(Substring, String2, re.IGNORECASE))
+print(Napravlenie)
+
+
+

@@ -8,6 +8,7 @@ Created on Tue Jan 26 10:04:06 2021
 import PyPDF2
 import os
 import tika
+import pandas as pd
 import re
 
 tika.initVM()
@@ -16,9 +17,15 @@ from tika import parser
 # direc = 'C:\\1\\'
 # file = '2.pdf'
 # path = direc + file
+input = 'D://drop//Dropbox//20-21//Аккредитация//Scan//Новая папка//Список.xls'
+
+x1 = pd.ExcelFile(input)
+df1 = x1.parse('TDSheet')
+df2 = x1.parse('Napr')
+df1_Vedomosti_Number = df1['Номер']
+# Input_Vedomosti = 59453
 
 
-import pandas as pd
 from tkinter import *
 from tkinter import filedialog as fd
 
@@ -61,31 +68,60 @@ def Vedomosti(file, parsed, directory1):
     fileReader = PyPDF2.PdfFileReader(directory1 + file)
     num_pages = fileReader.getNumPages()
     # print(Num_int)
-    Predmet = parsed['content'].find("семестр\n") + 9
-    Correct_Semestr = parsed['content'][Predmet:Predmet +30]
-    print(Correct_Semestr)
+    #  Predmet = parsed['content'].find("семестр\n") + 9
+    #  Correct_Semestr = parsed['content'][Predmet:Predmet +30]
+    #  print(Correct_Semestr)
     Correct_Name = parsed["content"][Num_int + 2:Num_int + 11]
     Correct_Name.replace(" ", "")
-    output = f'C:\\1\\2\\Ведомость_{Correct_Name}.txt'
-    with open(output, 'w') as f:
-        print(parsed['content'], file=f)
 
-    
+    # output = f'C:\\1\\2\\Ведомость_{Correct_Name}.txt'
+    # with open(output, 'w') as f:
+    #    print(parsed['content'], file=f)
+
     GroupNumber = SearchGroup(parsed)
+    NapravlenieNumber = SearchNapravlenie(GroupNumber)
+    PredmetNumber = SearchPredmet(Correct_Name)
+
     print(GroupNumber)
-    return Correct_Name
+    print(PredmetNumber)
+    return Correct_Name + "_" + GroupNumber + "_" + PredmetNumber + "_" + NapravlenieNumber
+
 
 def SearchGroup(inputPDF):
     data = inputPDF['content']
     group = re.search(r'\b\d{5}\b', data)
 
     if group is not None:
-          return group.group()
+        return group.group()
 
-def SearchPredmet(inputPDF):
-    data = inputPDF['content']
 
-    predmet = 'lol'
+def SearchPredmet(Input_Vedomosti):
+    Discipline = 'Дисциплина'
+    Semestr = 'Период контроля'
+
+    Input_Vedomosti = int(Input_Vedomosti.lstrip("0"))
+
+    for i in range(df1_Vedomosti_Number.size):
+        if Input_Vedomosti == df1_Vedomosti_Number[i]:
+            print(df1_Vedomosti_Number[i])
+            Discipline = df1['Дисциплина'][i]
+            Semestr = df1['Период контроля'][i]
+        i += 1
+
+    return str(Discipline + "_" + Semestr)
+
+
+def SearchNapravlenie(Number):
+
+    Napravlenie = 'NONE'
+    Number = int(Number)
+
+    for i in range(df2['Направление'].size - 1):
+        if Number == df2['Группа'][i]:
+            Napravlenie = df2['Направление'][i]
+        i += 1
+
+    return Napravlenie
 
 def Name(Name):
     return os.rename(path, f'{direc}Ведомость_{Name}.pdf')
