@@ -6,6 +6,8 @@ import pandas as pd
 from tkinter import *
 from tkinter import filedialog as fd
 
+
+stand = 'C://1//2'
 def selectDir():
     return fd.askdirectory()+'/'
 
@@ -31,9 +33,9 @@ def DirectoryCreate(path, file):
 
     Name = file.split('_')
 
-    path= Napravlenie
+    path = stand+ '//' + Name[-1]
 
-    // Надо разбить путь на вхождения и можно жить дальше
+   # // Надо разбить путь на вхождения и можно жить дальше
     try:
         os.makedirs(path)
     except OSError:
