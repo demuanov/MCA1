@@ -7,7 +7,7 @@ from tkinter import *
 from tkinter import filedialog as fd
 
 
-stand = 'C://1//2'
+stand = 'C:\\1\\2'
 def selectDir():
     return fd.askdirectory()+'/'
 
@@ -21,27 +21,35 @@ def startRename(directory):
     while files:
         file=files[0]
         ext=file.split('.')[-1]
-        ext2=os.path.splitext(file)[0]
+
         if not os.path.isfile(f'{directory}{i}.{ext}'):
-            name = f'{i}.{ext}'
-            DirectoryCreate(directory1, ext2)
-            os.rename(directory1+file, directory1+name)
+            #name = f'{i}.{ext}'
+            DirectoryCreate(directory1, file, ext)
+            #os.rename(DirectoryCreate(directory1, file) + file , directory1+name)
             del files[0]
         i+=1
 
-def DirectoryCreate(path, file):
-
-    Name = file.split('_')
-
-    path = stand+ '//' + Name[-1]
+def DirectoryCreate(directory, file, ext):
+    ext2=os.path.splitext(file)[0]
+    Name = ext2.split('_')
+    Correct_Name = Name[0] + '_' + Name[1]+'.'+ext
+    path = stand + '\\' + Name[len(Name) - 1] + '\\' + Name[len(Name) - 2] + '\\' + Name[len(Name) - 4] + '\\' + Name[len(Name) - 3] + '\\'
 
    # // Надо разбить путь на вхождения и можно жить дальше
     try:
-        os.makedirs(path)
+
+        if not os.path.isdir(path):
+            os.makedirs(path)
+
+        os.replace(directory+file, path+file)
+        os.rename(path+file, path+Correct_Name)
     except OSError:
+
+
         print("Создать директорию %s не удалось" % path)
     else:
         print("Успешно создана директория %s" % path)
+
 
 
 

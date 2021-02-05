@@ -44,6 +44,7 @@ def startRename(directory):
 
     while files:
         file = files[0]
+        print(file)
         ext = file.split('.')[-1]
         if not os.path.isfile(f'{directory}{i}.{ext}'):
             parsed = pars(directory1 + file)
@@ -74,8 +75,8 @@ def Vedomosti(file, parsed, directory1):
     Correct_Name = parsed["content"][Num_int + 2:Num_int + 11]
     Correct_Name.replace(" ", "")
 
-    # output = f'C:\\1\\2\\Ведомость_{Correct_Name}.txt'
-    # with open(output, 'w') as f:
+    #output = f'C:\\1\\2\\Ведомость_{Correct_Name}.txt'
+    #with open(output, 'w') as f:
     #    print(parsed['content'], file=f)
 
     GroupNumber = SearchGroup(parsed)
@@ -91,8 +92,14 @@ def SearchGroup(inputPDF):
     data = inputPDF['content']
     group = re.search(r'\b\d{5}\b', data)
 
-    if group is not None:
-        return group.group()
+    if group is None:
+        group = re.search(r'\b\d{5}\D',data)
+        group = group.group()[0:-1]
+
+    else:
+        group = group.group()
+
+    return group
 
 
 def SearchPredmet(Input_Vedomosti):
@@ -114,8 +121,10 @@ def SearchPredmet(Input_Vedomosti):
 def SearchNapravlenie(Number):
 
     Napravlenie = 'NONE'
-    Number = int(Number)
-
+    if Number is not None:
+        Number = int(Number)
+    else:
+        Number = '11111'
     for i in range(df2['Направление'].size - 1):
         if Number == df2['Группа'][i]:
             Napravlenie = df2['Направление'][i]
